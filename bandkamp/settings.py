@@ -13,6 +13,14 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
+# 'os' is a Python module that allows us to manipulate the os itself:
+import os
+import dotenv
+import ipdb
+
+# Loads all local environment variables:
+dotenv.load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,7 +29,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-e91823y78dgasdas89cvyxz76the912j321321-cx9!!#1232111!!!"
+# This is the default django SECRET_KEY:
+# SECRET_KEY = "django-e91823y78dgasdas89cvyxz76the912j321321-cx9!!#1232111!!!"
+# This is .env SECRET_KEY:
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -86,10 +97,22 @@ WSGI_APPLICATION = "bandkamp.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
+    # PostgreSQL settings:
     "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "USER": os.getenv("POSTGRES_USERNAME"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+        "NAME": os.getenv("POSTGRES_DB_NAME"),
+        # if not specified, HOST will be 127.0.0.1:
+        "HOST": os.getenv("POSTGRES_DB_HOST"),
+        # if not specified, PORT will be 5432:
+        "PORT": os.getenv("POSTGRES_DB_PORT"),
+    },
+    # Original/default Database settings:
+    "Other_name": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
-    }
+    },
 }
 
 

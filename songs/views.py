@@ -12,7 +12,7 @@ class SongView(APIView, PageNumberPagination):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def get(self, request, pk):
+    def get(self, request, pk: int):
         """
         Obtençao de musicas
         """
@@ -23,7 +23,7 @@ class SongView(APIView, PageNumberPagination):
 
         return self.get_paginated_response(serializer.data)
 
-    def post(self, request, pk):
+    def post(self, request, pk: int):
         """
         Criaçao de musica
         """
