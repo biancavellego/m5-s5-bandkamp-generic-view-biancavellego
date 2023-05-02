@@ -97,7 +97,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "bandkamp.wsgi.application"
+WSGI_APPLICATION = "bandkamp.application"
 
 
 # Database
