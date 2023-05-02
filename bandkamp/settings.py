@@ -97,8 +97,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "bandkamp.application"
-
+WSGI_APPLICATION = "bandkamp.wsgi"
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
