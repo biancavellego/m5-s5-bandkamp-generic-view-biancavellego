@@ -1,36 +1,27 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView, Response, status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .models import Song
 from rest_framework.pagination import PageNumberPagination
-from .serializers import SongSerializer
+from songs.serializers import SongSerializer
+from songs.models import Song
 from albums.models import Album
+from rest_framework import generics
 
 
-class SongView(APIView, PageNumberPagination):
+class SongListPagination(PageNumberPagination):
+    page_size = 1
+    page_size_query_param = "page_size"
+
+
+class SongView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = SongListPagination
 
-    def get(self, request, pk: int):
-        """
-        Obtençao de musicas
-        """
-        songs = Song.objects.filter(album_id=pk)
+    queryset = Song.objects.all()
+    serializer_class = SongSerializer
 
-        result_page = self.paginate_queryset(songs, request)
-        serializer = SongSerializer(result_page, many=True)
+    def perform_create(self, serializer) -> None:
+        serializer.save(album_id=self.request.user.id)
 
-        return self.get_paginated_response(serializer.data)
 
-    def post(self, request, pk: int):
-        """
-        Criaçao de musica
-        """
-        album = get_object_or_404(Album, pk=pk)
-
-        serializer = SongSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(album=album)
-
-        return Response(serializer.data, status.HTTP_201_CREATED)
+# album_id = self.request.user.album
