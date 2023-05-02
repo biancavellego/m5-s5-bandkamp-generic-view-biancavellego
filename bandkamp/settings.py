@@ -16,7 +16,6 @@ from datetime import timedelta
 # 'os' is a Python module that allows us to manipulate the os itself:
 import os
 import dotenv
-import ipdb
 import dj_database_url
 from django.core.management.utils import get_random_secret_key
 
